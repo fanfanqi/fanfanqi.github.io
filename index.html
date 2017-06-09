@@ -320,119 +320,15 @@
 
       
         
-          
-            <p>题目1：在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。<br>请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。</p>
-<p>一种解法为：观察这个二维数组的结构，从左到右递增，从上到下递增，理所应当，<br>第一列最下端是一个比较合适的起始位置，这个还是比较容易理解的，<br>如果target比之小，则向上移，如果target比之大，则向右移。</p>
-<pre><code>function （target,array）{
-    var rowCount=array.length-1;
-    for(var i=rowCount,j=0;i&gt;=0&amp;&amp;j&lt;array[i].length;){
-    if(target==array[i][j]){
-    return true;
-    }else if(target&gt;array[i][j]){
-    j++;
-    continue;
-    }else if(target&lt;array[i][j]){
-    i--;
-    continue;
-    }
-    }
-    return false;
-}
-</code></pre><p>题目2：请实现一个函数，将一个字符串中的空格替换成“%20”。<br>例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。</p>
-<p>思路：调用replace函数</p>
-<pre><code>function replaceSpace(str){
-    var newstr;
-    newstr=str.replace(/\s+?/g,&quot;%20&quot;);
-    return newstr;
-}
-</code></pre><p>题目3：输入一个链表，从尾到头打印链表每个节点的值。</p>
-<p>思路：定义一个数组，将链表的节点依次push进数组，将数组倒序输出</p>
-<pre><code>function printListFromTailToHead(head){
-    if(!head){
-        return 0;
-    }else{
-        var arr=new Array();
-        for(var q=head,q;q=q.next){
-            arr.push(q.val);
-        }
-        arr.reverse();
-        return arr;
-    }
-}
-</code></pre><p>题目4：输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。</p>
-<p>思路：前序遍历的第一个节点就是根节点，中序遍历根节点的左边为根节点的左子树，右边为根节点的右子树。</p>
-<pre><code>function reConstructBinaryTree(pre,vin){
-    if(pre.length==0||vin.length==0){
-        return null;
-    }
-    var index=vin.indexOf(pre[0]);
-    var left=vin.slice(0,index);//中序左子树
-    var right=vin.slice(index+1);//中序右子树
-    return {
-        val:pre[0],
-        left:reConstructBinaryTree(pre.slice(1,index+1),left),
-        right:reConstructBinaryTree(pre.slice(index+1),right)
-    };
-}
-</code></pre><p>题目5：用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。</p>
-<p>思路：JS用数组实现比较简单，因为JS的数组是变长的，可以一个负责在尾部入栈，一个在头部出栈</p>
-<pre><code>var arr=new Array();
-function push(node){
-    var i=arr.length;
-    arr[i]=node;
-}
-function pop(){
-    var i=arr.length;
-    if(i&lt;=0){
-        return ;
-    }
-    var k=arr[0];
-    for(i=0;i&lt;arr.length;i++){
-        arr[i]=arr[i+1];
-    }
-    arr.length--;
-    return k;
-}
-</code></pre><p>题目6：把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。输入一个非递减排序的数组的一个旋转，输出旋转数组的最小元素。例如数组{3,4,5,1,2}为{1,2,3,4,5}的一个旋转，该数组的最小值为1。</p>
-<p>NOTE：给出的所有元素都大于0，若数组大小为0，请返回0。<br>思路：采用二分法解答这个问题，需要考虑3种情况</p>
-<p>1.数组为空<br>2.部分旋转，例如由（1,2,3,4,5）旋转为（3,4,5,1,2），此时只需要遍历数组，找到当前数比前面的数小的数即可。<br>3.完全旋转，例如由（1,2,3,4,5）旋转为（1,2,3,4,5），此时第一个数最小。</p>
-<pre><code>function minNumberInRotateArray(rotateArray){
-    if(rotateArray.length==0){
-        return 0;
-    }
-    if(rotateArray.length==1){
-        return rotateArray[0];
-    }
-    var index=Math.floor(rotateArray.length/2);
-    var left=rotateArray.slice(0,index);
-    var right=rotateArray.slice(index);
-    var recuArray;
-    // if(rotateArray[index-1]&lt;rotateArray[0]){
-    //     recuArray=left;
-    // }
-    recuArray=(rotateArray[index-1]&gt;rotateArray[0]?right:left);
-    if(right[0]&lt;=right[right.length-1])  return right[0];
-    else recuArray=right;
-    return minNumberInRotateArray(recuArray);
-}
-</code></pre><hr>
-<pre><code>function minNumberInRotateArray(rotateArray){
-    if(rotateArray.length==0){
-        return 0;
-    }
-    if(rotateArray.length==1){
-        return rotateArray[0];
-    }
-    for(var i=1;i&lt;rotateArray.length;i++){
-        if(rotateArray[i-1]&gt;rotateArray[i]){
-            return rotateArray[i];
-        }else{
-            return rotateArray[0];
-        }
-    }
-}
-</code></pre>
-          
+          <p>题目1：在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。</p>
+<p>一种解法为：观察这个二维数组的结构，从左到右递增，从上到下递增，理所应当，<br>第一列最下端是一个比较合适的起始位置，这个还是比较容易理解的，<br>如果target比之小，则向上移，如果target比之大，则向右移。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/09/剑指offer/#more" rel="contents">
+              Weiterlesen &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
